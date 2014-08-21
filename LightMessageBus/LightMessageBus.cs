@@ -1,4 +1,6 @@
-﻿namespace LightMessageBus
+﻿using System;
+
+namespace LightMessageBus
 {
     /// <summary>
     /// Light-weight message bus
@@ -8,9 +10,22 @@
     /// </remarks>
     public class LightMessageBus
     {
+        #region Constructors
+
+        //hide default constructor to force the use of instance property
+        protected LightMessageBus() { }
+
+        #endregion
+
+        #region Singleton
+
+        private static readonly Lazy<LightMessageBus> DefaultInstance = new Lazy<LightMessageBus>(()=>new LightMessageBus());
+        
         public static LightMessageBus Default
         {
-            get { return new LightMessageBus(); }
+            get { return DefaultInstance.Value; }
         }
+
+        #endregion
     }
 }

@@ -10,5 +10,11 @@ namespace LightMessageBus.Test
         {
             Assert.IsNotNull(LightMessageBus.Default);
         }
+
+        [Test]
+        public void Default_ReturnsSameInstance()
+        {
+            Assert.AreSame(LightMessageBus.Default, LightMessageBus.Default);
+        }
     }
 }
