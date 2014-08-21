@@ -1,4 +1,5 @@
 ﻿using System;
+using LightMessageBus.Interfaces;
 
 namespace LightMessageBus
 {
@@ -8,7 +9,7 @@ namespace LightMessageBus
     /// <remarks>
     /// Used to enable communication between objects without direct references.
     /// </remarks>
-    public class LightMessageBus
+    public class LightMessageBus : IMessages
     {
         #region Constructors
 
@@ -24,6 +25,15 @@ namespace LightMessageBus
         public static LightMessageBus Default
         {
             get { return DefaultInstance.Value; }
+        }
+
+        #endregion
+
+        #region IMessages
+
+        public IMessages From(object publisher)
+        {
+            return this;
         }
 
         #endregion
