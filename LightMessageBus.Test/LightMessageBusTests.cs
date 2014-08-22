@@ -7,7 +7,7 @@ namespace LightMessageBus.Test
     [TestFixture]
     public class LightMessageBusTests
     {
-        #region Singleton
+        #region Default
         
         [Test]
         public void Default_ReturnsSingleton()
@@ -74,6 +74,17 @@ namespace LightMessageBus.Test
             LightMessageBus.Default.Publish(new object());
 
             Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void Publish_DifferentSubscriberNotNotified()
+        {
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
+
+            LightMessageBus.Default.Publish(new object());
+
+            Assert.IsFalse(subscriber.IsNotified);
         }
 
         #endregion
