@@ -36,6 +36,13 @@ namespace LightMessageBus
             return this;
         }
 
+        public void Notify(object subscriber)
+        {
+            (subscriber as dynamic).IsRegistered = true;
+        }
+
         #endregion
+
+
     }
 }
