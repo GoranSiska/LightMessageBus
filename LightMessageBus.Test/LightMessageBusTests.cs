@@ -69,9 +69,10 @@ namespace LightMessageBus.Test
         public void GivenRegisteredSubscriber_WhenMessagePublished_SubscriberNotified()
         {
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.From(new object()).Notify(subscriber);
+            var publisher = new object();
+            LightMessageBus.Default.From(publisher).Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new object());
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -80,9 +81,10 @@ namespace LightMessageBus.Test
         public void GivenRegisteredSubscriber_WhenMessagePublished_OtherSubscriberNotNotified()
         {
             var otherSubscriber = new NotifiableSubscriber();
+            var publisher = new object();
             LightMessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
 
-            LightMessageBus.Default.Publish(new object());
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
 
             Assert.IsFalse(otherSubscriber.IsNotified);
         }
@@ -96,10 +98,21 @@ namespace LightMessageBus.Test
             var secondSubscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(publisher).Notify(secondSubscriber);
 
-            LightMessageBus.Default.Publish(new object());
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
 
-            Assert.IsTrue(firstSubscriber.IsNotified);
-            Assert.IsTrue(secondSubscriber.IsNotified);
+            Assert.IsTrue(firstSubscriber.IsNotified && secondSubscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenMultiplePublishers_WhenMessagePublished_SubscriberToOtherPublisherNotNotified()
+        {
+            var publisher = new object();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.From(new object()).Notify(subscriber);
+            
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
         }
 
         #endregion

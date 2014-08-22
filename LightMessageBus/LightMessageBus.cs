@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LightMessageBus.Interfaces;
 
 namespace LightMessageBus
@@ -14,7 +15,9 @@ namespace LightMessageBus
     {
         #region Globals
 
-        private IList<IMessageHandler> _registeredSubscribers = new List<IMessageHandler>();
+        private IList<RegistrationEntry> _register = new List<RegistrationEntry>();
+
+        private int _publisherHashCode;
 
         #endregion
 
@@ -40,20 +43,22 @@ namespace LightMessageBus
 
         public IMessages From(object publisher)
         {
+            _publisherHashCode = publisher.GetHashCode();
+
             return this;
         }
 
-        public void Publish(object message)
+        public void Publish(IMessage message)
         {
-            foreach (var registeredSubscriber in _registeredSubscribers)
+            foreach (var registrationEntry in _register.Where(re=>re.PublisherHashCode == message.Source.GetHashCode()))
             {
-                registeredSubscriber.Handle(message);   
+                registrationEntry.Subscriber.Handle(message);   
             }
         }
 
         public bool HasRegistered(IMessageHandler subscriber)
         {
-            return _registeredSubscribers.Contains(subscriber);
+            return _register.Any(re => re.Subscriber == subscriber);
         }
 
         #endregion
@@ -62,11 +67,19 @@ namespace LightMessageBus
 
         public void Notify(IMessageHandler subscriber)
         {
-            _registeredSubscribers.Add(subscriber);
+            _register.Add(new RegistrationEntry
+            {
+                Subscriber = subscriber, 
+                PublisherHashCode = _publisherHashCode
+            });
         }
 
         #endregion
+    }
 
-
+    class RegistrationEntry
+    {
+        public IMessageHandler Subscriber { get; set; }
+        public int PublisherHashCode { get; set; }
     }
 }
