@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IMessages.cs" />
+    <Compile Include="Interfaces\IPublishers.cs" />
     <Compile Include="LightMessageBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
