@@ -10,19 +10,19 @@ namespace LightMessageBus.Test
         #region Default
         
         [Test]
-        public void Default_ReturnsSingleton()
+        public void GivenMessageBus_WhenDefault_ReturnsObject()
         {
             Assert.IsNotNull(LightMessageBus.Default);
         }
 
         [Test]
-        public void Default_ReturnsSameInstance()
+        public void GivenMessageBus_WhenDefault_ReturnsSameInstance()
         {
             Assert.AreSame(LightMessageBus.Default, LightMessageBus.Default);
         }
 
         [Test]
-        public void Default_ReturnsPublishers()
+        public void GivenMessageBus_WhenDefault_ReturnsPublishers()
         {
             Assert.IsInstanceOf<IPublishers>(LightMessageBus.Default);
         }
@@ -32,7 +32,7 @@ namespace LightMessageBus.Test
         #region From
 
         [Test]
-        public void From_ReturnsUntypedMessages()
+        public void GivenMessageBus_WhenFrom_ReturnsMessages()
         {
             var messages = LightMessageBus.Default.From(new object());
 
@@ -44,7 +44,7 @@ namespace LightMessageBus.Test
         #region Notify
 
         [Test]
-        public void Notify_SubscriberRegistered()
+        public void GivenSubscriber_WhenSubscriberRegistered_SubscriberRegistered()
         {
             var subscriber = new EmptySubscriber();
 
@@ -54,7 +54,7 @@ namespace LightMessageBus.Test
         }
 
         [Test]
-        public void NoNotify_SubscriberNotRegistered()
+        public void GivenSubscriber_WhenSubscriberNotRegistered_SubscriberNotRegistered()
         {
             var subscriber = new EmptySubscriber();
 
@@ -66,7 +66,7 @@ namespace LightMessageBus.Test
         #region Publish
 
         [Test]
-        public void Publish_SubscriberNotified()
+        public void GivenRegisteredSubscriber_WhenMessagePublished_SubscriberNotified()
         {
             var subscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(new object()).Notify(subscriber);
@@ -77,14 +77,14 @@ namespace LightMessageBus.Test
         }
 
         [Test]
-        public void Publish_DifferentSubscriberNotNotified()
+        public void GivenRegisteredSubscriber_WhenMessagePublished_OtherSubscriberNotNotified()
         {
-            var subscriber = new NotifiableSubscriber();
+            var otherSubscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
 
             LightMessageBus.Default.Publish(new object());
 
-            Assert.IsFalse(subscriber.IsNotified);
+            Assert.IsFalse(otherSubscriber.IsNotified);
         }
 
         #endregion
