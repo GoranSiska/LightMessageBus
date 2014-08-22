@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LightMessageBus.Interfaces;
 
 namespace LightMessageBus
@@ -13,7 +14,7 @@ namespace LightMessageBus
     {
         #region Globals
 
-        private IMessageHandler _registeredSubscriber;
+        private IList<IMessageHandler> _registeredSubscribers = new List<IMessageHandler>();
 
         #endregion
 
@@ -44,12 +45,15 @@ namespace LightMessageBus
 
         public void Publish(object message)
         {
-            _registeredSubscriber.Handle(message);
+            foreach (var registeredSubscriber in _registeredSubscribers)
+            {
+                registeredSubscriber.Handle(message);   
+            }
         }
 
-        public bool HasRegistered(object subscriber)
+        public bool HasRegistered(IMessageHandler subscriber)
         {
-            return subscriber == _registeredSubscriber;
+            return _registeredSubscribers.Contains(subscriber);
         }
 
         #endregion
@@ -58,7 +62,7 @@ namespace LightMessageBus
 
         public void Notify(IMessageHandler subscriber)
         {
-            _registeredSubscriber = subscriber;
+            _registeredSubscribers.Add(subscriber);
         }
 
         #endregion

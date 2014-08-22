@@ -87,6 +87,21 @@ namespace LightMessageBus.Test
             Assert.IsFalse(otherSubscriber.IsNotified);
         }
 
+        [Test]
+        public void GivenMultipleRegisteredSubscribers_WhenMessagePublished_AllSubscribersNotified()
+        {
+            var publisher = new object();
+            var firstSubscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.From(publisher).Notify(firstSubscriber);
+            var secondSubscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.From(publisher).Notify(secondSubscriber);
+
+            LightMessageBus.Default.Publish(new object());
+
+            Assert.IsTrue(firstSubscriber.IsNotified);
+            Assert.IsTrue(secondSubscriber.IsNotified);
+        }
+
         #endregion
 
         
