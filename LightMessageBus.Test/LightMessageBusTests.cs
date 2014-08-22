@@ -69,10 +69,10 @@ namespace LightMessageBus.Test
         public void GivenRegisteredSubscriber_WhenMessagePublished_SubscriberNotified()
         {
             var subscriber = new NotifiableSubscriber();
-            var publisher = new object();
+            var publisher = new CommonPublisher();
             LightMessageBus.Default.From(publisher).Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -81,10 +81,10 @@ namespace LightMessageBus.Test
         public void GivenRegisteredSubscriber_WhenMessagePublished_OtherSubscriberNotNotified()
         {
             var otherSubscriber = new NotifiableSubscriber();
-            var publisher = new object();
+            var publisher = new CommonPublisher();
             LightMessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsFalse(otherSubscriber.IsNotified);
         }
@@ -92,13 +92,13 @@ namespace LightMessageBus.Test
         [Test]
         public void GivenMultipleRegisteredSubscribers_WhenMessagePublished_AllSubscribersNotified()
         {
-            var publisher = new object();
+            var publisher = new CommonPublisher();
             var firstSubscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(publisher).Notify(firstSubscriber);
             var secondSubscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(publisher).Notify(secondSubscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(firstSubscriber.IsNotified && secondSubscriber.IsNotified);
         }
@@ -106,17 +106,15 @@ namespace LightMessageBus.Test
         [Test]
         public void GivenMultiplePublishers_WhenMessagePublished_SubscriberToOtherPublisherNotNotified()
         {
-            var publisher = new object();
+            var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
             LightMessageBus.Default.From(new object()).Notify(subscriber);
             
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsFalse(subscriber.IsNotified);
         }
 
         #endregion
-
-        
     }
 }
