@@ -3,7 +3,7 @@
     public interface IPublishers
     {
         IMessages From(object publisher);
-        void Publish(object message);
+        void Publish(IMessage message);
 
         bool HasRegistered(IMessageHandler subscriber);
     }
