@@ -38,15 +38,17 @@ namespace LightMessageBus.Test
         #region Notify
 
         [Test]
-        public void Publish_SubscriberRegisered()
+        public void Notify_SubscriberRegistered()
         {
             var subscriber = new RegistrableSubscriber();
 
             LightMessageBus.Default.From(new object()).Notify(subscriber);
 
-            Assert.IsTrue(subscriber.IsRegistered);
+            Assert.IsTrue(LightMessageBus.Default.HasRegistered(subscriber));
         }
 
         #endregion
+
+        
     }
 }

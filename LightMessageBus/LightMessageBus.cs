@@ -29,16 +29,29 @@ namespace LightMessageBus
 
         #endregion
 
-        #region IMessages
+        #region Queries
+
+        public bool HasRegistered(object subscriber)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region IPublishers
 
         public IMessages From(object publisher)
         {
             return this;
         }
 
+        #endregion
+
+        #region IMessages
+
         public void Notify(object subscriber)
         {
-            (subscriber as dynamic).IsRegistered = true;
+            
         }
 
         #endregion
