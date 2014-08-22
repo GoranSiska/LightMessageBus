@@ -1,6 +1,8 @@
-﻿namespace LightMessageBus.Test.TestClasses
+﻿using LightMessageBus.Interfaces;
+
+namespace LightMessageBus.Test.TestClasses
 {
-    public class NotifiableSubscriber
+    public class NotifiableSubscriber : IMessageHandler
     {
         public bool IsNotified { get; private set; }
 

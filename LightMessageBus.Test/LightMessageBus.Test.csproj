@@ -42,8 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LightMessageBusTests.cs" />
+    <Compile Include="TestClasses\NotifiableSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestClasses\RegistrableSubscriber.cs" />
+    <Compile Include="TestClasses\EmptySubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">

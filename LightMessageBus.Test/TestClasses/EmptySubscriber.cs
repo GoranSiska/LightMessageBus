@@ -1,7 +1,14 @@
-﻿namespace LightMessageBus.Test.TestClasses
+﻿using LightMessageBus.Interfaces;
+
+namespace LightMessageBus.Test.TestClasses
 {
-    public class RegistrableSubscriber
+    public class EmptySubscriber : IMessageHandler
     {
         public bool IsRegistered { get; set; }
+        
+        public void Handle(object message)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
