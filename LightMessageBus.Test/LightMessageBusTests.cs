@@ -40,14 +40,24 @@ namespace LightMessageBus.Test
         [Test]
         public void Notify_SubscriberRegistered()
         {
-            var subscriber = new RegistrableSubscriber();
+            var subscriber = new EmptySubscriber();
 
             LightMessageBus.Default.From(new object()).Notify(subscriber);
 
             Assert.IsTrue(LightMessageBus.Default.HasRegistered(subscriber));
         }
 
+        [Test]
+        public void NoNotify_SubscriberNotRegistered()
+        {
+            var subscriber = new EmptySubscriber();
+
+            Assert.IsFalse(LightMessageBus.Default.HasRegistered(subscriber));
+        }
+
         #endregion
+
+
 
         
     }

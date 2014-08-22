@@ -11,6 +11,12 @@ namespace LightMessageBus
     /// </remarks>
     public class LightMessageBus : IPublishers, IMessages
     {
+        #region Globals
+
+        private object _registeredSubscriber;
+
+        #endregion
+
         #region Constructors
 
         //hide default constructor to force the use of instance property
@@ -33,7 +39,7 @@ namespace LightMessageBus
 
         public bool HasRegistered(object subscriber)
         {
-            return true;
+            return subscriber == _registeredSubscriber;
         }
 
         #endregion
@@ -51,7 +57,7 @@ namespace LightMessageBus
 
         public void Notify(object subscriber)
         {
-            
+            _registeredSubscriber = subscriber;
         }
 
         #endregion
