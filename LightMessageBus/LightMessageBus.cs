@@ -9,7 +9,7 @@ namespace LightMessageBus
     /// <remarks>
     /// Used to enable communication between objects without direct references.
     /// </remarks>
-    public class LightMessageBus : IMessages
+    public class LightMessageBus : IPublishers, IMessages
     {
         #region Constructors
 
@@ -22,7 +22,7 @@ namespace LightMessageBus
 
         private static readonly Lazy<LightMessageBus> DefaultInstance = new Lazy<LightMessageBus>(()=>new LightMessageBus());
         
-        public static LightMessageBus Default
+        public static IPublishers Default
         {
             get { return DefaultInstance.Value; }
         }
