@@ -13,7 +13,7 @@ namespace LightMessageBus
     {
         #region Globals
 
-        private object _registeredSubscriber;
+        private IMessageHandler _registeredSubscriber;
 
         #endregion
 
@@ -35,7 +35,17 @@ namespace LightMessageBus
 
         #endregion
 
-        #region Queries
+        #region IPublishers
+
+        public IMessages From(object publisher)
+        {
+            return this;
+        }
+
+        public void Publish(object message)
+        {
+            _registeredSubscriber.Handle(message);
+        }
 
         public bool HasRegistered(object subscriber)
         {
@@ -44,18 +54,9 @@ namespace LightMessageBus
 
         #endregion
 
-        #region IPublishers
-
-        public IMessages From(object publisher)
-        {
-            return this;
-        }
-
-        #endregion
-
         #region IMessages
 
-        public void Notify(object subscriber)
+        public void Notify(IMessageHandler subscriber)
         {
             _registeredSubscriber = subscriber;
         }

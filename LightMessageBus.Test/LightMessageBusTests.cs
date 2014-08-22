@@ -21,6 +21,12 @@ namespace LightMessageBus.Test
             Assert.AreSame(LightMessageBus.Default, LightMessageBus.Default);
         }
 
+        [Test]
+        public void Default_ReturnsPublishers()
+        {
+            Assert.IsInstanceOf<IPublishers>(LightMessageBus.Default);
+        }
+
         #endregion
 
         #region From
@@ -57,7 +63,20 @@ namespace LightMessageBus.Test
 
         #endregion
 
+        #region Publish
 
+        [Test]
+        public void Publish_SubscriberNotified()
+        {
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.From(new object()).Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new object());
+
+            Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        #endregion
 
         
     }

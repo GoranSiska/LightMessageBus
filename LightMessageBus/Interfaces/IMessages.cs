@@ -2,6 +2,6 @@
 {
     public interface IMessages
     {
-        void Notify(object subscriber);
+        void Notify(IMessageHandler subscriber);
     }
 }
