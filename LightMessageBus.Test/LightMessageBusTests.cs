@@ -1,4 +1,5 @@
-﻿using LightMessageBus.Interfaces;
+﻿using System;
+using LightMessageBus.Interfaces;
 using LightMessageBus.Test.TestClasses;
 using NUnit.Framework;
 
@@ -35,6 +36,14 @@ namespace LightMessageBus.Test
         public void GivenMessageBus_WhenFrom_ReturnsMessages()
         {
             var messages = LightMessageBus.Default.From(new object());
+
+            Assert.IsInstanceOf<IMessages>(messages);
+        }
+
+        [Test]
+        public void GivenMessageBus_WhenFromAny_ReturnsMessages()
+        {
+            var messages = LightMessageBus.Default.FromAny();
 
             Assert.IsInstanceOf<IMessages>(messages);
         }
@@ -113,6 +122,18 @@ namespace LightMessageBus.Test
             LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsFalse(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenAnyPublisher_WhenMessagePublished_SubscriberToAnyPublisherNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(publisher.Message());
+
+            Assert.IsTrue(subscriber.IsNotified);
         }
 
         #endregion

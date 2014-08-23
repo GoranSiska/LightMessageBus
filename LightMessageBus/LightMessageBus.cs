@@ -48,12 +48,25 @@ namespace LightMessageBus
             return this;
         }
 
+        public IMessages FromAny()
+        {
+            _publisherHashCode = -1;
+
+            return this;
+        }
+
         public void Publish(IMessage message)
         {
-            foreach (var registrationEntry in _register.Where(re=>re.PublisherHashCode == message.Source.GetHashCode()))
+            foreach (var registrationEntry in MatchingSubscribers(message))
             {
                 registrationEntry.Subscriber.Handle(message);   
             }
+        }
+
+        private IEnumerable<RegistrationEntry> MatchingSubscribers(IMessage message)
+        {
+            return _register
+                .Where(re=>re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode());
         }
 
         public bool HasRegistered(IMessageHandler subscriber)
