@@ -17,7 +17,7 @@ namespace LightMessageBus
 
         private IList<RegistrationEntry> _register = new List<RegistrationEntry>();
 
-        private int _publisherHashCode;
+        private RegistrationEntry _entry;
 
         #endregion
 
@@ -43,14 +43,20 @@ namespace LightMessageBus
 
         public IMessages From(object publisher)
         {
-            _publisherHashCode = publisher.GetHashCode();
+            _entry = new RegistrationEntry
+            {
+                PublisherHashCode = publisher.GetHashCode(),
+            };
 
             return this;
         }
 
         public IMessages FromAny()
         {
-            _publisherHashCode = -1;
+            _entry = new RegistrationEntry
+            {
+                PublisherHashCode = -1
+            };
 
             return this;
         }
@@ -66,7 +72,8 @@ namespace LightMessageBus
         private IEnumerable<RegistrationEntry> MatchingSubscribers(IMessage message)
         {
             return _register
-                .Where(re=>re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode());
+                .Where(re => re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode())
+                .Where(re => re.MessageType == null || re.MessageType == message.GetType());
         }
 
         public bool HasRegistered(IMessageHandler subscriber)
@@ -78,13 +85,17 @@ namespace LightMessageBus
 
         #region IMessages
 
+        public IMessages Where<T>() where T : IMessage
+        {
+            _entry.MessageType = typeof(T);
+
+            return this;
+        }
+
         public void Notify(IMessageHandler subscriber)
         {
-            _register.Add(new RegistrationEntry
-            {
-                Subscriber = subscriber, 
-                PublisherHashCode = _publisherHashCode
-            });
+            _entry.Subscriber = subscriber;
+            _register.Add(_entry);
         }
 
         #endregion
@@ -94,5 +105,6 @@ namespace LightMessageBus
     {
         public IMessageHandler Subscriber { get; set; }
         public int PublisherHashCode { get; set; }
+        public Type MessageType { get; set; }
     }
 }

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestClasses\CommonPublisher.cs" />
+    <Compile Include="TestClasses\MessageWithValue.cs" />
     <Compile Include="TestClasses\MessageWithSource.cs" />
     <Compile Include="LightMessageBusTests.cs" />
     <Compile Include="TestClasses\NotifiableSubscriber.cs" />
