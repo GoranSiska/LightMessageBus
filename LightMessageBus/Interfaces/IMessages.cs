@@ -3,6 +3,6 @@
     public interface IMessages
     {
         IMessages Where<T>() where T : IMessage;
-        void Notify(IMessageHandler subscriber);
+        void Notify<T>(IMessageHandler<T> subscriber) where T : IMessage;
     }
 }

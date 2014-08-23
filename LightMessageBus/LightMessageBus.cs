@@ -15,6 +15,7 @@ namespace LightMessageBus
     {
         #region Globals
 
+
         private IList<RegistrationEntry> _register = new List<RegistrationEntry>();
 
         private RegistrationEntry _entry;
@@ -61,22 +62,24 @@ namespace LightMessageBus
             return this;
         }
 
-        public void Publish(IMessage message)
+        public void Publish<T>(T message) where T : IMessage
         {
-            foreach (var registrationEntry in MatchingSubscribers(message))
+            foreach (var subscriber in MatchingSubscribers<T>(message))
             {
-                registrationEntry.Subscriber.Handle(message);   
+                subscriber.Handle(message);   
             }
         }
 
-        private IEnumerable<RegistrationEntry> MatchingSubscribers(IMessage message)
+        private IEnumerable<IMessageHandler<T>> MatchingSubscribers<T>(IMessage message) where T : IMessage
         {
             return _register
                 .Where(re => re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode())
-                .Where(re => re.MessageType == null || re.MessageType == message.GetType());
+                .Where(re => re.MessageType == null || re.MessageType == message.GetType())
+                .Select(re => re.Subscriber)
+                .OfType<IMessageHandler<T>>();
         }
 
-        public bool HasRegistered(IMessageHandler subscriber)
+        public bool HasRegistered<T>(IMessageHandler<T> subscriber) where T : IMessage
         {
             return _register.Any(re => re.Subscriber == subscriber);
         }
@@ -92,19 +95,25 @@ namespace LightMessageBus
             return this;
         }
 
-        public void Notify(IMessageHandler subscriber)
+        public void Notify<T>(IMessageHandler<T> subscriber) where T : IMessage
         {
             _entry.Subscriber = subscriber;
             _register.Add(_entry);
         }
 
         #endregion
+
+        #region Subclasses
+
+        private class RegistrationEntry
+        {
+            public object Subscriber { get; set; }
+            public int PublisherHashCode { get; set; }
+            public Type MessageType { get; set; }
+        }
+
+        #endregion
     }
 
-    class RegistrationEntry
-    {
-        public IMessageHandler Subscriber { get; set; }
-        public int PublisherHashCode { get; set; }
-        public Type MessageType { get; set; }
-    }
+
 }

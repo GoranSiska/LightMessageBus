@@ -40,7 +40,6 @@ namespace LightMessageBus.Test
 
         #endregion
 
-
         #region From
 
         [Test]
@@ -160,7 +159,19 @@ namespace LightMessageBus.Test
         }
 
         [Test]
-        public void GivenSubscriptionToTypedMessage_WhenDifferentMessagePublished_SubscriberNortNotified()
+        public void GivenSubscriptionToTypedMessage_WhenDifferentMessagePublished_SubscriberNotNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new MessageWithValue(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenMultipleSubscriptionToTypedMessage_WhenMessagePublished_SubscriberSameHandleNotified()
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
