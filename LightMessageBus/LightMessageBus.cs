@@ -15,8 +15,7 @@ namespace LightMessageBus
     {
         #region Globals
 
-
-        private IList<RegistrationEntry> _register = new List<RegistrationEntry>();
+        private readonly IList<RegistrationEntry> _register = new List<RegistrationEntry>();
 
         private RegistrationEntry _entry;
 
@@ -25,7 +24,7 @@ namespace LightMessageBus
         #region Constructors
 
         //hide default constructor to force the use of instance property
-        protected LightMessageBus() { }
+        private LightMessageBus() { }
 
         #endregion
 
@@ -88,11 +87,11 @@ namespace LightMessageBus
 
         #region IMessages
 
-        public IMessages Where<T>() where T : IMessage
+        public IMessages<T> Where<T>() where T : IMessage
         {
             _entry.MessageType = typeof(T);
 
-            return this;
+            return GenericLightMessageBus<T>.Default;
         }
 
         public void Notify<T>(IMessageHandler<T> subscriber) where T : IMessage
@@ -105,7 +104,7 @@ namespace LightMessageBus
 
         #region Subclasses
 
-        private class RegistrationEntry
+        protected class RegistrationEntry
         {
             public object Subscriber { get; set; }
             public int PublisherHashCode { get; set; }
@@ -115,5 +114,34 @@ namespace LightMessageBus
         #endregion
     }
 
+    //constrains the interface to a single generic notify method
+    internal class GenericLightMessageBus<T> : IMessages<T> where T : IMessage
+    {
+        #region Constructors
 
+        //hide default constructor to force the use of instance property
+        private GenericLightMessageBus() { }
+
+        #endregion
+
+        #region Singleton
+
+        private static readonly Lazy<GenericLightMessageBus<T>> DefaultInstance = new Lazy<GenericLightMessageBus<T>>(()=>new GenericLightMessageBus<T>());
+
+        public static GenericLightMessageBus<T> Default
+        {
+            get { return DefaultInstance.Value; }
+        }
+
+        #endregion
+
+        #region IMessages
+
+        public void Notify(IMessageHandler<T> subscriber)
+        {
+            ((IMessages) LightMessageBus.Default).Notify(subscriber);
+        }
+
+        #endregion
+    }
 }

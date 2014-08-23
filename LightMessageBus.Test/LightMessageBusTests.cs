@@ -33,9 +33,9 @@ namespace LightMessageBus.Test
         #region Where
 
         [Test]
-        public void GivenMessageBus_WhenDefault_ReturnsMessages()
+        public void GivenMessageBus_WhenDefault_ReturnsTypedMessages()
         {
-            Assert.IsInstanceOf<IPublishers>(LightMessageBus.Default.FromAny().Where<MessageWithSource>());
+            Assert.IsInstanceOf<IMessages<MessageWithSource>>(LightMessageBus.Default.FromAny().Where<MessageWithSource>());
         }
 
         #endregion
@@ -187,7 +187,7 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new AlphaBetaSubscriber();
-            LightMessageBus.Default.FromAny().Where<AlphaMessage>().Notify<AlphaMessage>(subscriber);
+            LightMessageBus.Default.FromAny().Where<AlphaMessage>().Notify(subscriber);
 
             LightMessageBus.Default.Publish(new AlphaMessage(publisher));
 
