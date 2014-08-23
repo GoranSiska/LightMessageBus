@@ -2,11 +2,11 @@
 
 namespace LightMessageBus.Test.TestClasses
 {
-    public class NotifiableSubscriber : IMessageHandler
+    public class NotifiableSubscriber : IMessageHandler<MessageWithSource>
     {
         public bool IsNotified { get; private set; }
 
-        public void Handle(object message)
+        public void Handle(MessageWithSource message)
         {
             IsNotified = true;
         }

@@ -2,11 +2,11 @@
 
 namespace LightMessageBus.Test.TestClasses
 {
-    public class EmptySubscriber : IMessageHandler
+    public class EmptySubscriber : IMessageHandler<MessageWithValue>
     {
         public bool IsRegistered { get; set; }
-        
-        public void Handle(object message)
+
+        public void Handle(MessageWithValue message)
         {
             throw new System.NotImplementedException();
         }

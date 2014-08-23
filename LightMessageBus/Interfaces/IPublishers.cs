@@ -4,8 +4,8 @@
     {
         IMessages From(object publisher);
         IMessages FromAny();
-        void Publish(IMessage message);
+        void Publish<T>(T message) where T : IMessage;
 
-        bool HasRegistered(IMessageHandler subscriber);
+        bool HasRegistered<T>(IMessageHandler<T> subscriber) where T : IMessage;
     }
 }

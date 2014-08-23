@@ -1,7 +1,7 @@
 ﻿namespace LightMessageBus.Interfaces
 {
-    public interface IMessageHandler
+    public interface IMessageHandler<T> where T : IMessage
     {
-        void Handle(object message);
+        void Handle(T message);
     }
 }
