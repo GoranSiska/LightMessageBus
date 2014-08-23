@@ -30,6 +30,17 @@ namespace LightMessageBus.Test
 
         #endregion
 
+        #region Where
+
+        [Test]
+        public void GivenMessageBus_WhenDefault_ReturnsMessages()
+        {
+            Assert.IsInstanceOf<IPublishers>(LightMessageBus.Default.FromAny().Where<MessageWithSource>());
+        }
+
+        #endregion
+
+
         #region From
 
         [Test]
@@ -134,6 +145,30 @@ namespace LightMessageBus.Test
             LightMessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenSubscriptionToTypedMessage_WhenMessagePublished_SubscriberNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(publisher.Message());
+
+            Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenSubscriptionToTypedMessage_WhenDifferentMessagePublished_SubscriberNortNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new MessageWithValue(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
         }
 
         #endregion
