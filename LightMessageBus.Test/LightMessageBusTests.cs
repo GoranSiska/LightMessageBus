@@ -171,15 +171,27 @@ namespace LightMessageBus.Test
         }
 
         [Test]
-        public void GivenMultipleSubscriptionToTypedMessage_WhenMessagePublished_SubscriberSameHandleNotified()
+        public void GivenMultipleSubscriptionToTypedMessage_WhenMessagePublished_SubscriberNotified()
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
             LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithValue(publisher));
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
 
-            Assert.IsFalse(subscriber.IsNotified);
+            Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenMultipleSubscriptionToTypedMessage_WhenMessagePublished_SubscriberSameHandleNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new AlphaBetaSubscriber();
+            LightMessageBus.Default.FromAny().Where<AlphaMessage>().Notify<AlphaMessage>(subscriber);
+
+            LightMessageBus.Default.Publish(new AlphaMessage(publisher));
+
+            Assert.IsTrue(subscriber.AlphaMessageHandled);
         }
 
         #endregion

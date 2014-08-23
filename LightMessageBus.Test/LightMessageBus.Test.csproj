@@ -41,6 +41,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestClasses\AlphaBetaSubscriber.cs" />
+    <Compile Include="TestClasses\AlphaMessage.cs" />
+    <Compile Include="TestClasses\BetaMessage.cs" />
     <Compile Include="TestClasses\CommonPublisher.cs" />
     <Compile Include="TestClasses\MessageWithValue.cs" />
     <Compile Include="TestClasses\MessageWithSource.cs" />
