@@ -44,11 +44,3 @@ Lastly we define the subscriber:
 
 * `Notify` - specifies the subscriber.
 
-TODO contracts/interfaces
-
-### Why does this project exist?
-Working with various application and UI frameworks in my day job, I've grown accustomed to having an application level **message bus** to exchange messages between objects. Recently I've been working on a game and failed to find any simple, light-weight message bus projects on the web. Perhaps others might find this little project useful.
-
-As a practitioner of **TDD** I'm always on a lookout for projects that allow me to practice TDD in my spare time. Something meaningful, a bit larger then simple *bowling kata* and small enough to be worked on in the late hours of the day. Perhaps I might learn something new.
-
-     
