@@ -32,14 +32,8 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
-*.ncrunchsolution
 packages/*
 *.vsp
 *.psess
-*.ncrunchproject
 _ignore/*
-Windows.Mono/*
-PerformanceDev/*
 *.cachefile
-Windows/NuBattlefield.Library.Tests/Properties/AssemblyInfo.cs
-Windows/NuBattlefield.Library/GameComponentHelpers/Units/_*
