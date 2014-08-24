@@ -74,13 +74,13 @@ namespace LightMessageBus
             return _register
                 .Where(re => re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode())
                 .Where(re => re.MessageType == null || re.MessageType == message.GetType())
-                .Select(re => re.Subscriber)
+                .Select(re => re.Subscriber.Target)
                 .OfType<IMessageHandler<T>>();
         }
 
         public bool HasRegistered<T>(IMessageHandler<T> subscriber) where T : IMessage
         {
-            return _register.Any(re => re.Subscriber == subscriber);
+            return _register.Any(re => re.Subscriber.Target == subscriber);
         }
 
         #endregion
@@ -96,7 +96,7 @@ namespace LightMessageBus
 
         public void Notify<T>(IMessageHandler<T> subscriber) where T : IMessage
         {
-            _entry.Subscriber = subscriber;
+            _entry.Subscriber = new WeakReference(subscriber);
             _register.Add(_entry);
         }
 
@@ -106,7 +106,7 @@ namespace LightMessageBus
 
         protected class RegistrationEntry
         {
-            public object Subscriber { get; set; }
+            public WeakReference Subscriber { get; set; }
             public int PublisherHashCode { get; set; }
             public Type MessageType { get; set; }
         }
