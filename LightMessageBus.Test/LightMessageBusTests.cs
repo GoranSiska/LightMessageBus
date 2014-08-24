@@ -33,7 +33,7 @@ namespace LightMessageBus.Test
         #region Where
 
         [Test]
-        public void GivenMessageBus_WhenDefault_ReturnsTypedMessages()
+        public void GivenMessageBus_WhenWhere_ReturnsTypedMessages()
         {
             Assert.IsInstanceOf<IMessages<MessageWithSource>>(LightMessageBus.Default.FromAny().Where<MessageWithSource>());
         }
@@ -79,6 +79,28 @@ namespace LightMessageBus.Test
 
             Assert.IsFalse(LightMessageBus.Default.HasRegistered(subscriber));
         }
+
+        [Test]
+        public void GiveSubscriber_WhenSubscriberDisposed_SubscriberNotReferenced()
+        {
+            WeakReference subscriberWeakReference = null;
+            new Action(() =>
+            {
+                var subscriber = new NotifiableSubscriber();
+                LightMessageBus.Default.FromAny().Notify(subscriber);
+
+                subscriberWeakReference = new WeakReference(subscriber);
+            })();          
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            
+            Assert.IsFalse(subscriberWeakReference.IsAlive);
+        }
+
+        [Test]
+        public void GiveSubscriber_WhenSubscriberDisposed_SubscriberNotRegistered()
+        { }
 
         #endregion
 
@@ -195,5 +217,6 @@ namespace LightMessageBus.Test
         }
 
         #endregion
+
     }
 }
