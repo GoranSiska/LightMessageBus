@@ -193,6 +193,54 @@ namespace LightMessageBus.Test
         }
 
         [Test]
+        public void GivenSubscriptionToTypedMessage_WhenBaseMessagePublished_SubscriberNotNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new DerivedNotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<DerivedMessageWithSource>().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenSubscriptionToTypedMessage_WhenDerivedMessagePublished_SubscriberNotNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenSubscriptionToDerivedMessageWithDerived_WhenBaseMessagePublished_SubscriberNotNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new DerivedNotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<DerivedMessageWithSource>().OrDerived().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+
+            Assert.IsFalse(subscriber.IsNotified);
+        }
+
+        [Test]
+        public void GivenSubscriptionToBaseMessageWithDerived_WhenDerivedMessagePublished_SubscriberNotified()
+        {
+            var publisher = new CommonPublisher();
+            var subscriber = new NotifiableSubscriber();
+            LightMessageBus.Default.FromAny().Where<MessageWithSource>().OrDerived().Notify(subscriber);
+
+            LightMessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
+
+            Assert.IsTrue(subscriber.IsNotified);
+        }
+
+        [Test]
         public void GivenMultipleSubscriptionToTypedMessage_WhenMessagePublished_SubscriberNotified()
         {
             var publisher = new CommonPublisher();
