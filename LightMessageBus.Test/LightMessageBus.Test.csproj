@@ -45,9 +45,11 @@
     <Compile Include="TestClasses\AlphaMessage.cs" />
     <Compile Include="TestClasses\BetaMessage.cs" />
     <Compile Include="TestClasses\CommonPublisher.cs" />
+    <Compile Include="TestClasses\DerivedMessageWithSource.cs" />
     <Compile Include="TestClasses\MessageWithValue.cs" />
     <Compile Include="TestClasses\MessageWithSource.cs" />
     <Compile Include="LightMessageBusTests.cs" />
+    <Compile Include="TestClasses\DerivedNotifiableSubscriber.cs" />
     <Compile Include="TestClasses\NotifiableSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClasses\EmptySubscriber.cs" />

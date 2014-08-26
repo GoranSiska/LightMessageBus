@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using LightMessageBus.Interfaces;
 
 namespace LightMessageBus
@@ -73,7 +75,7 @@ namespace LightMessageBus
         {
             return _register
                 .Where(re => re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode())
-                .Where(re => re.MessageType == null || re.MessageType == message.GetType())
+                .Where(re => re.MessageType == null || re.MessageType == message.GetType() || (re.OrDerived && message.GetType().GetTypeInfo().IsSubclassOf(re.MessageType)))
                 .Select(re => re.Subscriber.Target)
                 .OfType<IMessageHandler<T>>();
         }
@@ -100,6 +102,11 @@ namespace LightMessageBus
             _register.Add(_entry);
         }
 
+        internal void OrDerived()
+        {
+            _entry.OrDerived = true;
+        }
+
         #endregion
 
         #region Subclasses
@@ -109,6 +116,7 @@ namespace LightMessageBus
             public WeakReference Subscriber { get; set; }
             public int PublisherHashCode { get; set; }
             public Type MessageType { get; set; }
+            public bool OrDerived { get; set; }
         }
 
         #endregion
@@ -136,6 +144,13 @@ namespace LightMessageBus
         #endregion
 
         #region IMessages
+
+        public IMessages<T> OrDerived()
+        {
+            ((LightMessageBus)LightMessageBus.Default).OrDerived();
+
+            return this;
+        }
 
         public void Notify(IMessageHandler<T> subscriber)
         {

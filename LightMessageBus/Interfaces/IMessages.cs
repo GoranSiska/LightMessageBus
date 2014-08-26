@@ -8,6 +8,7 @@
 
     public interface IMessages<T> where T : IMessage
     {
+        IMessages<T> OrDerived();
         void Notify(IMessageHandler<T> subscriber);
     }
 }
