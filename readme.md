@@ -6,13 +6,13 @@ A simple, light-weight application level **event aggregator** which facilitates 
 > A soundComponent needs to be notified whenever a user clicks on any button.
 
 ```
-LightMessageBus.Default.FromAny().Where<ButtonClickMessage>.Notify(soundComponent)
+MessageBus.Default.FromAny().Where<ButtonClickMessage>.Notify(soundComponent)
 ```
 
 > A taxCalculator needs to be notified whenever shopping cart is changed.
 
 ```
-LightMessageBus.Default.From(shoppingCart).Notify(taxCalculator);
+MessageBus.Default.From(shoppingCart).Notify(taxCalculator);
 ``` 
 
 ### How is this achieved?
