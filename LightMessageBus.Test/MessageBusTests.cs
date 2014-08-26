@@ -6,26 +6,26 @@ using NUnit.Framework;
 namespace LightMessageBus.Test
 {
     [TestFixture]
-    public class LightMessageBusTests
+    public class MessageBusTests
     {
         #region Default
         
         [Test]
         public void GivenMessageBus_WhenDefault_ReturnsObject()
         {
-            Assert.IsNotNull(LightMessageBus.Default);
+            Assert.IsNotNull(MessageBus.Default);
         }
 
         [Test]
         public void GivenMessageBus_WhenDefault_ReturnsSameInstance()
         {
-            Assert.AreSame(LightMessageBus.Default, LightMessageBus.Default);
+            Assert.AreSame(MessageBus.Default, MessageBus.Default);
         }
 
         [Test]
         public void GivenMessageBus_WhenDefault_ReturnsPublishers()
         {
-            Assert.IsInstanceOf<IPublishers>(LightMessageBus.Default);
+            Assert.IsInstanceOf<IPublishers>(MessageBus.Default);
         }
 
         #endregion
@@ -35,7 +35,7 @@ namespace LightMessageBus.Test
         [Test]
         public void GivenMessageBus_WhenWhere_ReturnsTypedMessages()
         {
-            Assert.IsInstanceOf<IMessages<MessageWithSource>>(LightMessageBus.Default.FromAny().Where<MessageWithSource>());
+            Assert.IsInstanceOf<IMessages<MessageWithSource>>(MessageBus.Default.FromAny().Where<MessageWithSource>());
         }
 
         #endregion
@@ -45,7 +45,7 @@ namespace LightMessageBus.Test
         [Test]
         public void GivenMessageBus_WhenFrom_ReturnsMessages()
         {
-            var messages = LightMessageBus.Default.From(new object());
+            var messages = MessageBus.Default.From(new object());
 
             Assert.IsInstanceOf<IMessages>(messages);
         }
@@ -53,7 +53,7 @@ namespace LightMessageBus.Test
         [Test]
         public void GivenMessageBus_WhenFromAny_ReturnsMessages()
         {
-            var messages = LightMessageBus.Default.FromAny();
+            var messages = MessageBus.Default.FromAny();
 
             Assert.IsInstanceOf<IMessages>(messages);
         }
@@ -67,9 +67,9 @@ namespace LightMessageBus.Test
         {
             var subscriber = new EmptySubscriber();
 
-            LightMessageBus.Default.From(new object()).Notify(subscriber);
+            MessageBus.Default.From(new object()).Notify(subscriber);
 
-            Assert.IsTrue(LightMessageBus.Default.HasRegistered(subscriber));
+            Assert.IsTrue(MessageBus.Default.HasRegistered(subscriber));
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace LightMessageBus.Test
         {
             var subscriber = new EmptySubscriber();
 
-            Assert.IsFalse(LightMessageBus.Default.HasRegistered(subscriber));
+            Assert.IsFalse(MessageBus.Default.HasRegistered(subscriber));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace LightMessageBus.Test
             new Action(() =>
             {
                 var subscriber = new NotifiableSubscriber();
-                LightMessageBus.Default.FromAny().Notify(subscriber);
+                MessageBus.Default.FromAny().Notify(subscriber);
 
                 subscriberWeakReference = new WeakReference(subscriber);
             })();          
@@ -111,9 +111,9 @@ namespace LightMessageBus.Test
         {
             var subscriber = new NotifiableSubscriber();
             var publisher = new CommonPublisher();
-            LightMessageBus.Default.From(publisher).Notify(subscriber);
+            MessageBus.Default.From(publisher).Notify(subscriber);
 
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -123,9 +123,9 @@ namespace LightMessageBus.Test
         {
             var otherSubscriber = new NotifiableSubscriber();
             var publisher = new CommonPublisher();
-            LightMessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
+            MessageBus.Default.From(new object()).Notify(new NotifiableSubscriber());
 
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsFalse(otherSubscriber.IsNotified);
         }
@@ -135,11 +135,11 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var firstSubscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.From(publisher).Notify(firstSubscriber);
+            MessageBus.Default.From(publisher).Notify(firstSubscriber);
             var secondSubscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.From(publisher).Notify(secondSubscriber);
+            MessageBus.Default.From(publisher).Notify(secondSubscriber);
 
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(firstSubscriber.IsNotified && secondSubscriber.IsNotified);
         }
@@ -149,9 +149,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.From(new object()).Notify(subscriber);
+            MessageBus.Default.From(new object()).Notify(subscriber);
             
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsFalse(subscriber.IsNotified);
         }
@@ -161,9 +161,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Notify(subscriber);
+            MessageBus.Default.FromAny().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -173,9 +173,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(publisher.Message());
+            MessageBus.Default.Publish(publisher.Message());
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -185,9 +185,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithValue(publisher));
+            MessageBus.Default.Publish(new MessageWithValue(publisher));
 
             Assert.IsFalse(subscriber.IsNotified);
         }
@@ -197,9 +197,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new DerivedNotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<DerivedMessageWithSource>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<DerivedMessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            MessageBus.Default.Publish(new MessageWithSource(publisher));
 
             Assert.IsFalse(subscriber.IsNotified);
         }
@@ -209,9 +209,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
+            MessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
 
             Assert.IsFalse(subscriber.IsNotified);
         }
@@ -221,9 +221,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new DerivedNotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<DerivedMessageWithSource>().OrDerived().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<DerivedMessageWithSource>().OrDerived().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            MessageBus.Default.Publish(new MessageWithSource(publisher));
 
             Assert.IsFalse(subscriber.IsNotified);
         }
@@ -233,9 +233,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<MessageWithSource>().OrDerived().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<MessageWithSource>().OrDerived().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
+            MessageBus.Default.Publish(new DerivedMessageWithSource(publisher));
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -245,9 +245,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new NotifiableSubscriber();
-            LightMessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<MessageWithSource>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new MessageWithSource(publisher));
+            MessageBus.Default.Publish(new MessageWithSource(publisher));
 
             Assert.IsTrue(subscriber.IsNotified);
         }
@@ -257,9 +257,9 @@ namespace LightMessageBus.Test
         {
             var publisher = new CommonPublisher();
             var subscriber = new AlphaBetaSubscriber();
-            LightMessageBus.Default.FromAny().Where<AlphaMessage>().Notify(subscriber);
+            MessageBus.Default.FromAny().Where<AlphaMessage>().Notify(subscriber);
 
-            LightMessageBus.Default.Publish(new AlphaMessage(publisher));
+            MessageBus.Default.Publish(new AlphaMessage(publisher));
 
             Assert.IsTrue(subscriber.AlphaMessageHandled);
         }

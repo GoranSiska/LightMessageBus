@@ -13,7 +13,7 @@ namespace LightMessageBus
     /// <remarks>
     /// Used to enable communication between objects without direct references.
     /// </remarks>
-    public class LightMessageBus : IPublishers, IMessages
+    public class MessageBus : IPublishers, IMessages
     {
         #region Globals
 
@@ -26,13 +26,13 @@ namespace LightMessageBus
         #region Constructors
 
         //hide default constructor to force the use of instance property
-        private LightMessageBus() { }
+        private MessageBus() { }
 
         #endregion
 
         #region Singleton
 
-        private static readonly Lazy<LightMessageBus> DefaultInstance = new Lazy<LightMessageBus>(()=>new LightMessageBus());
+        private static readonly Lazy<MessageBus> DefaultInstance = new Lazy<MessageBus>(()=>new MessageBus());
         
         public static IPublishers Default
         {
@@ -147,14 +147,14 @@ namespace LightMessageBus
 
         public IMessages<T> OrDerived()
         {
-            ((LightMessageBus)LightMessageBus.Default).OrDerived();
+            ((MessageBus)MessageBus.Default).OrDerived();
 
             return this;
         }
 
         public void Notify(IMessageHandler<T> subscriber)
         {
-            ((IMessages) LightMessageBus.Default).Notify(subscriber);
+            ((IMessages) MessageBus.Default).Notify(subscriber);
         }
 
         #endregion
