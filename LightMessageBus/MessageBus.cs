@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using LightMessageBus.Interfaces;
 
 namespace LightMessageBus
@@ -75,7 +73,7 @@ namespace LightMessageBus
         {
             return _register
                 .Where(re => re.PublisherHashCode == -1 || re.PublisherHashCode == message.Source.GetHashCode())
-                .Where(re => re.MessageType == null || re.MessageType == message.GetType() || (re.OrDerived && message.GetType().GetTypeInfo().IsSubclassOf(re.MessageType)))
+                .Where(re => re.MessageType == null || re.MessageType == message.GetType() || (re.OrDerived && message.GetType().IsSubclassOf(re.MessageType)))
                 .Select(re => re.Subscriber.Target)
                 .OfType<IMessageHandler<T>>();
         }
