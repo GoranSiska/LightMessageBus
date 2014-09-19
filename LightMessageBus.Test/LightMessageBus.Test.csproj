@@ -48,7 +48,7 @@
     <Compile Include="TestClasses\DerivedMessageWithSource.cs" />
     <Compile Include="TestClasses\MessageWithValue.cs" />
     <Compile Include="TestClasses\MessageWithSource.cs" />
-    <Compile Include="LightMessageBusTests.cs" />
+    <Compile Include="MessageBusTests.cs" />
     <Compile Include="TestClasses\DerivedNotifiableSubscriber.cs" />
     <Compile Include="TestClasses\NotifiableSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
