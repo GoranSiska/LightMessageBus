@@ -41,6 +41,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegistrationEntryRepository.cs" />
     <Compile Include="RegistrationEntryTests.cs" />
     <Compile Include="TestClasses\AlphaBetaSubscriber.cs" />
     <Compile Include="TestClasses\AlphaMessage.cs" />
