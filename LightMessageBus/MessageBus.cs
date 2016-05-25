@@ -63,7 +63,7 @@ namespace LightMessageBus
 
         public void Publish<T>(T message) where T : IMessage
         {
-            foreach (var subscriber in MatchingSubscribers<T>(message))
+            foreach (var subscriber in MatchingSubscribers<T>(message).ToArray())
             {
                 subscriber.Handle(message);   
             }
