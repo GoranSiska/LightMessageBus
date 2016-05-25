@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>LightMessageBus</id>
+        <version>1.0.1</version>
+        <authors>Goran Šiška</authors>
+        <licenseUrl>https://bitbucket.org/goransiska/lightmessagebus/src/c4b2cd30f40e402a9216d7587de4cf14f8f7c884/LICENCE.txt</licenseUrl>
+        <projectUrl>https://bitbucket.org/goransiska/lightmessagebus</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A simple, light-weight application level event aggregator which facilitates the exchange of messages between objects without direct references.</description>
+        <releaseNotes>BUGFIX - fixed case when within publish a new subscriber was added</releaseNotes>
+        <tags>message bus event aggregator</tags>
+    </metadata>
+    <files>
+        <file src="lib\portable-net4+sl5+wp8+win8\LightMessageBus.dll" target="lib\portable-net4+sl5+wp8+win8\LightMessageBus.dll" />
+        <file src="lib\portable-net4+sl5+wp8+win8\LightMessageBus.XML" target="lib\portable-net4+sl5+wp8+win8\LightMessageBus.XML" />
+    </files>
+</package>
