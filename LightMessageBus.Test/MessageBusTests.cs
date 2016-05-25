@@ -264,6 +264,22 @@ namespace LightMessageBus.Test
             Assert.IsTrue(subscriber.AlphaMessageHandled);
         }
 
+        [Test]
+        public void GivenRegisteredSubscriber_WhenMessagePublishedAndWithinNewSubscriberIsCreated_DontThrow()
+        {
+            var subscriber = new NotifiableSubscriber();
+            var subscriber2 = new NotifiableSubscriber();
+            var publisher = new CommonPublisher();
+            MessageBus.Default.From(publisher).Notify(subscriber);
+
+            subscriber.Handled += (s, e) =>
+            {
+                MessageBus.Default.From(publisher).Notify(subscriber2);
+            };
+            MessageBus.Default.Publish(publisher.Message());
+
+            Assert.IsTrue(subscriber.IsNotified);
+        }
         #endregion
 
     }
